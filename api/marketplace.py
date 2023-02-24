@@ -6,6 +6,11 @@ class Item:
     assetId: str
     price: float
 
+    def __init__(self, name, itemId, price):
+        self.name = name
+        self.id = itemId
+        self.price = price
+
 
 class Marketplace(ABC):
     rateLimit: int
