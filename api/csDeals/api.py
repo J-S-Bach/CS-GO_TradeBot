@@ -1,17 +1,10 @@
-import requests as requests
+from typing import List
+
+import requests
 from api.marketplace import Marketplace, Item
 from datetime import timedelta, datetime
 
 csGoAppId = 730
-
-
-class ItemCSDeals:
-    name: str
-    id: str
-
-    def __init__(self, name, id):
-        self.id = id
-        self.name = name
 
 
 class CSDealsMarketplace(Marketplace):
@@ -39,4 +32,7 @@ class CSDealsMarketplace(Marketplace):
             raise Exception("No item found with name " + name)
 
     def getItemDetail(self, name) -> Item:
+        pass
+
+    def getLowestPriceForItemList(self, names: List[str]) -> List[Item]:
         pass

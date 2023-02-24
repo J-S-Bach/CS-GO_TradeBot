@@ -1,4 +1,5 @@
 import time
+from typing import List
 
 import requests as requests
 from api.marketplace import Marketplace, Item
@@ -29,3 +30,9 @@ class BuffMarketplace(Marketplace):
                 return Item(item.name, None, buy_price)
         else:
             raise Exception("No valid ItemName given")
+
+    def getLowestPriceForItemList(self, names: List[str]) -> List[Item]:
+        pass
+
+    def getLowestPrice(self, name: str) -> Item:
+        pass

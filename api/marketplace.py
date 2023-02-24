@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import List
 
 
 class Item:
@@ -13,8 +14,15 @@ class Item:
 
 
 class Marketplace(ABC):
-    rateLimit: int
 
     @abstractmethod
-    def getItemDetail(self, name) -> Item:
+    def getItemDetail(self, name: str) -> Item:
+        pass
+
+    @abstractmethod
+    def getLowestPrice(self, name: str) -> Item:
+        pass
+
+    @abstractmethod
+    def getLowestPriceForItemList(self, names: List[str]) -> List[Item]:
         pass
