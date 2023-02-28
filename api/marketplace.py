@@ -20,6 +20,10 @@ class Marketplace(ABC):
         pass
 
     @abstractmethod
+    def getItemDetailForItemList(self, name: List[str]):
+        pass
+
+    @abstractmethod
     def getLowestPrice(self, name: str) -> Item:
         pass
 
