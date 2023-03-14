@@ -21,7 +21,6 @@ class SteamApi:
     def move_to_casket(self, item_asset_id, casket_asset_id):
         self.csgo_handler.moveToCasket(item_asset_id, casket_asset_id)
 
-
     # # Do we need it like this? If yes, we should instead save it to the Database,
     # # but i believe we need all tradeable items in inventory which we can filter.
     # def check_if_item_tradeable(self, asset_id):
