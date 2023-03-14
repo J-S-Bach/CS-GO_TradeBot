@@ -1,4 +1,5 @@
 import time
+from typing import List
 
 import requests as requests
 from api.marketplace import Marketplace, Item
@@ -27,6 +28,11 @@ class BuffMarketplace(Marketplace):
                     f"https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id={item.id}&page_num=1&sort_by=default&mode=&allow_tradable_cooldown=1&_={int(time.time())}").json()
                 buy_price = answer['data']['items'][0]['price']
                 return Item(item.name, None, buy_price)
-                break
         else:
             raise Exception("No valid ItemName given")
+
+    def getLowestPriceForItemList(self, names: List[str]) -> List[Item]:
+        pass
+
+    def getLowestPrice(self, name: str) -> Item:
+        pass

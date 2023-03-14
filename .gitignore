@@ -1,2 +1,7 @@
 .env
-.idea/*
+.idea
+env
+node_modules
+
+/api/steam/JSSteamHandler/RefreshToken.json
+/api/steam/translatedJS.py
