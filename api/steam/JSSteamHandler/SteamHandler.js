@@ -2,7 +2,7 @@ import GlobalOffensive from "globaloffensive";
 import { getLoggedInSteamUser } from "./authenticateAtSteam.js";
 // https://github.com/DoctorMcKay/node-globaloffensive
 
-class CsGoHandler {
+export default class CsGoHandler {
     constructor() {
         this._csgo = (async () => {
             const user = await getLoggedInSteamUser();
@@ -16,6 +16,9 @@ class CsGoHandler {
             });
         })();
     }
+
+    //TODO: Write a reload user function to reload inventory.
+    //TODO: Also add a timestamp everytime we use inventory to make sure its not older than a specific treshold...
 
     /**
      * Cost intensive. Use with caution!
@@ -40,22 +43,33 @@ class CsGoHandler {
         return allItems;
     }
 
-    // //TODO
-    // async checkIfItemTradeable(assetId) {
-    //     return await (await this._csgo).inspectItem("300033068", assetId);
-    // }
+//    async checkIfItemTradeable(assetId) {
+//        (await this._csgo).on("inspectItemTimedOut", itemId => {
+//            throw new Error("Request inspecting item with Id " + itemId + " timed out");
+//        });
+//
+//        return await (await this._csgo).inspectItem("300033068", assetId);
+//    }
 
-    // async getAllOwnedItemsInInventory() {
-    //     const items = (await this._csgo).inventory.filter(item => item.casket_id == undefined && item.id.length <= 12);
+    async getAllOwnedItemsInInventory() {
+        const items = (await this._csgo).inventory.filter(item => item.casket_id == undefined && item.id.length <= 12);
 
-    //     return (await this._csgo).inspectItem();
-    // }
+        return items;
+    }
 
     async moveFromCasket(itemAssetId, casketAssetId) {
-        return await this.removeFromCasket(casketAssetId, itemAssetId);
+        (await this._csgo).removeFromCasket(casketAssetId, itemAssetId);
     }
 
     async moveToCasket(itemAssetId, casketAssetId) {
-        return await this.addToCasket(casketAssetId, itemAssetId);
+        (await this._csgo).addToCasket(casketAssetId, itemAssetId);
+    }
+
+    async getCasketContent(assetId) {
+            return new Promise(async resolve => {
+                        (await this._csgo).getCasketContents(assetId, (err, items) => {
+                            resolve(items);
+                        });
+                    })
     }
 }

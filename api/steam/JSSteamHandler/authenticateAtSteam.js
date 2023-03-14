@@ -42,17 +42,18 @@ async function getLoginSessionWithQRCodeApproval() {
 }
 
 const getRefreshTokenFromFS = () => {
-    const rawData = fs.readFileSync("./RefreshToken.json", "utf8", (err, data) => {
+    const rawData = fs.readFileSync(process.cwd() + "/api/steam/JSSteamHandler/RefreshToken.json", "utf8", (err, data) => {
         if (err) {
             console.error(err);
+            return undefined
         }
     });
 
-    return JSON.parse(rawData);
+    return rawData ? JSON.parse(rawData) : rawData;
 };
 
 const setRefreshTokenToFS = data => {
-    fs.writeFileSync("./RefreshToken.json", JSON.stringify(data), err => {
+    fs.writeFileSync(process.cwd() + "/api/steam/JSSteamHandler/RefreshToken.json", JSON.stringify(data), err => {
         if (err) {
             console.error(err);
         }
