@@ -7,6 +7,8 @@ dotenv.config({ path: "../../../.env" });
 
 // This code was shamelessly stolen from DoctorMcKays repository under https://github.com/DoctorMcKay/node-steam-session/blob/master/examples/approve-qr.ts . - search here if you want some more information about it!
 async function getLoginSessionWithQRCodeApproval() {
+    console.log(process.env.STEAM_ACCESSTOKEN, process.env.STEAM_SHAREDSECRET)
+
     let approver = new LoginApprover(process.env.STEAM_ACCESSTOKEN, process.env.STEAM_SHAREDSECRET);
     let session = new LoginSession(EAuthTokenPlatformType.SteamClient);
 

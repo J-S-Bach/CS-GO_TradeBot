@@ -49,10 +49,9 @@ class CSDealsMarketplace(Marketplace):
 
         for offeredItem in answer["response"]["items"]:
             for tradeableItem in tradeableItems:
-                if tradeableItem.name in offeredItem["marketname"]:
-                    print("asd")
+                if tradeableItem.name == offeredItem["marketname"]:
                     cs_deal_items.append(
-                        Item(offeredItem["marketname"], None, offeredItem["lowest_price"], self.marketplace_name))
+                        Item(offeredItem["marketname"], None, float(offeredItem["lowest_price"]), self.marketplace_name))
 
         return cs_deal_items
 

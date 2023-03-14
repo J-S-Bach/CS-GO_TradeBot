@@ -73,6 +73,6 @@ class DMarketMarketplace(Marketplace):
         items = []
         for item in requests.get("https://api.dmarket.com" + route, headers=create_dmarket_header("GET", route)).json()[
             "AggregatedTitles"]:
-            items.append(Item(item["MarketHashName"], None, item["Offers"]["BestPrice"], self.marketplace_name))
+            items.append(Item(item["MarketHashName"], None, float(item["Offers"]["BestPrice"]), self.marketplace_name))
 
         return items

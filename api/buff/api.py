@@ -9,7 +9,7 @@ from api.marketplace import Marketplace, Item, tradeableItems
 
 class BuffMarketplace(Marketplace):
     marketplace_name = "BUFF"
-
+    fee = 0.975
     def getItemDetail(self, name) -> Item:
         for item in tradeableItems:
             if item.name == name:
@@ -32,10 +32,14 @@ class BuffMarketplace(Marketplace):
 
         for item in tradeableItems:
             answer = requests.get(
-                f"https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id={item.buffId}&page_num=1&sort_by=default&mode=&allow_tradable_cooldown=1&_={int(time.time())}").json()
-
+                f"https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id={item.buffId}&page_num=1&sort_by=default&mode=&allow_tradable_cooldown=1&_={int(time.time())}")
+            while int(answer.status_code) == 429:
+                time.sleep(2)
+                answer = requests.get(
+                    f"https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id={item.buffId}&page_num=1&sort_by=default&mode=&allow_tradable_cooldown=1&_={int(time.time())}")
+            answer = answer.json()
             buy_price = answer['data']['items'][0]['price']
-            buff_items.append(Item(item.name, None, buy_price * get_exchange_rate("CNY", "USD"), on_market=self.marketplace_name))
+            buff_items.append(Item(item.name, None, float(buy_price) * get_exchange_rate("CNY", "USD"), on_market=self.marketplace_name))
 
         return buff_items
 

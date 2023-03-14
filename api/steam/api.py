@@ -13,11 +13,9 @@ class SteamApi:
         """
         return list(self.csgo_handler.getAllOwnedItemsInCaskets())
 
-    # TODO: Test
     def move_from_casket(self, item_asset_id, casket_asset_id):
         self.csgo_handler.moveFromCasket(item_asset_id, casket_asset_id)
 
-    # TODO: Test
     def move_to_casket(self, item_asset_id, casket_asset_id):
         self.csgo_handler.moveToCasket(item_asset_id, casket_asset_id)
 
