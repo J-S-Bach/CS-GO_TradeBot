@@ -70,3 +70,7 @@ class Marketplace(ABC):
     @abstractmethod
     def get_all_offers_lowest_price(self) -> List[Item]:
         pass
+
+    @abstractmethod
+    def get_balance(self) -> float:
+        pass

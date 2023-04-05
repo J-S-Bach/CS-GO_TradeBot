@@ -45,3 +45,6 @@ class BuffMarketplace(Marketplace):
 
     def getLowestPriceForItemList(self, names: List[str]) -> List[Item]:
         pass
+
+    def get_balance(self) -> float:
+        None

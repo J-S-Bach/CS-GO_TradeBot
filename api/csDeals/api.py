@@ -1,10 +1,15 @@
+import os
+import time
 from typing import List
 
 import requests
+from dotenv import load_dotenv
+
 from api.marketplace import Marketplace, Item, tradeableItems
 from datetime import timedelta, datetime
 
 csGoAppId = 730
+load_dotenv()
 
 
 class CSDealsMarketplace(Marketplace):
@@ -51,9 +56,31 @@ class CSDealsMarketplace(Marketplace):
             for tradeableItem in tradeableItems:
                 if tradeableItem.name == offeredItem["marketname"]:
                     cs_deal_items.append(
-                        Item(offeredItem["marketname"], None, float(offeredItem["lowest_price"]), self.marketplace_name))
+                        Item(offeredItem["marketname"], None, float(offeredItem["lowest_price"]),
+                             self.marketplace_name))
 
         return cs_deal_items
 
     def getItemDetailForItemList(self, name: List[str]):
         pass
+
+    def get_balance(self):
+        headers = {
+            "content-type": "application/json",
+            "Authorization": str(os.getenv('CSDEALS_SECRET_KEY'))
+        }
+        balance = requests.get("https://cs.deals/API/IBalance/GetBalance/v1", headers=headers)
+
+        if balance.status_code == 502:
+            print("No Access to csDeals - waiting 1 Minute")
+            time.sleep(60)
+            # toDo Raise error if failed x-times
+            self.getBalance()
+        balance = balance.json()
+        if balance['success'] == True:
+            return balance['response']['usd']
+        else:
+            print("Error requesting csDeals balance - Try again" + str(balance))
+            time.sleep(30)
+            self.getBalance()
+        return balance
