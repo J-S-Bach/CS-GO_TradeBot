@@ -7,8 +7,8 @@ class TradableItem:
     name: str
     buffId: str
 
-    def __init__(self, name, buffId):
-        self.buffId = buffId
+    def __init__(self, name, buff_id):
+        self.buffId = buff_id
         self.name = name
 
 
@@ -57,6 +57,11 @@ class Item:
         self.on_market = on_market
 
 
+class ItemNotAvailable(Exception):
+    """"Raised when we try to access an item in an api, but the item cannot be found."""
+    pass
+
+
 class Marketplace(ABC):
     @abstractmethod
     def get_best_offer_for_item(self, name: str) -> Item:
@@ -71,5 +76,5 @@ class Marketplace(ABC):
         pass
 
     @abstractmethod
-    def sell_item(self, item: Item):
+    def sell_items(self, item: Item):
         pass

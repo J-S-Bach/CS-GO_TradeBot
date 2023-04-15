@@ -21,13 +21,11 @@ def get_exchange_rate(from_currency: CURRENCY, to_currency: CURRENCY) -> float:
         from_currency_price = requests.get("https://api.skinport.com/v1/sales/history", params={
             "app_id": "252490",
             "currency": from_currency.name,
-            "market_hash_name": "Fire jacket"
         }).json()
 
         to_currency_price = requests.get("https://api.skinport.com/v1/sales/history", params={
             "app_id": "252490",
             "currency": to_currency.name,
-            "market_hash_name": "Fire jacket"
         }).json()
 
         if from_currency_price["errors"]:
@@ -39,4 +37,5 @@ def get_exchange_rate(from_currency: CURRENCY, to_currency: CURRENCY) -> float:
 
     except Exception as e:
         print(f"Could not calculate currency with error: {str(e)}")
+        # raise e
         return 1

@@ -37,17 +37,19 @@ def get_profitable_offers() -> list[ProfitableOffer]:
     for buffOffer in buff_offers:
 
         for csDealsOffer in cs_deals_offers:
+            # TODO: Replace with defindex once implemented (id vs name)
             if buffOffer.name == csDealsOffer.name:
-                if csDealsOffer.price < buffOffer.price * buffApi.BuffMarketplace.fee:
-                    # TODO: I doubt the next line is correct. because: percentage? and fee missing
-                    profit = round(buffOffer.price / csDealsOffer.price * 100 - 100, 4)
+                if csDealsOffer.price < buffOffer.price + buffOffer.price * buffApi.BuffMarketplace.fee:
+                    profit = round(
+                        csDealsOffer.price / (buffOffer.price - buffOffer.price * buffApi.BuffMarketplace.fee) * 100, 4)
                     offer_list.append(ProfitableOffer(buffOffer, csDealsOffer, profit))
 
         for dMarketOffer in dmarket_offers:
+            # TODO: Replace with defindex once implemented (id vs name)
             if buffOffer.name == dMarketOffer.name:
-                if dMarketOffer.price < buffOffer.price * buffApi.BuffMarketplace.fee:
-                    # TODO: I doubt the next line is correct. because: percentage? and fee missing
-                    profit = round(buffOffer.price / dMarketOffer.price * 100 - 100, 4)
+                if dMarketOffer.price < buffOffer.price + buffOffer.price * buffApi.BuffMarketplace.fee:
+                    profit = round(
+                        dMarketOffer.price / (buffOffer.price - buffOffer.price * buffApi.BuffMarketplace.fee) * 100, 4)
                     offer_list.append(ProfitableOffer(buffOffer, dMarketOffer, profit))
 
     # sort offers by percentual profit

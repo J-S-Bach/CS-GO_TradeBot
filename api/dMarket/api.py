@@ -72,5 +72,5 @@ class DMarketMarketplace(Marketplace):
 
         return items
 
-    def sell_item(self, item):
+    def sell_items(self, item):
         pass

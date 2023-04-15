@@ -55,5 +55,5 @@ class CSDealsMarketplace(Marketplace):
 
         return return_offers
 
-    def sell_item(self, item):
+    def sell_items(self, item):
         pass
