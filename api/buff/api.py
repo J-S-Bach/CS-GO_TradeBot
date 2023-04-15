@@ -65,27 +65,28 @@ class BuffMarketplace(Marketplace):
                 '_': time.time() * 1000
             }, cookies=self.create_cookies()).json()
 
-        if response["error"]:
+        if not (response.get('error') is None):
             raise Exception("Could not get items from Buff with error:", response["error"])
 
         return response["data"]["items"]
 
     def sell_items(self, item: Item, amount: int = 1):
+        # TODO: Error Handling
         buff_items = self.get_items_from_buff(item)
 
         if len(buff_items) < amount:
             raise ItemNotAvailable()
 
         assets = []
-        for buff_item in buff_items:
+        for i in range(amount):
             assets.append(
-                {"game": buff_item['game'],
-                 "market_hash_name": buff_item['name'],
-                 "contextid": buff_item['asset_info']['contextid'],
-                 "assetid": buff_item['asset_info']['assetid'],
-                 "classid": buff_item['asset_info']['classid'],
-                 "instanceid": buff_item['asset_info']['instanceid'],
-                 "goods_id": buff_item['goods_id'],
+                {"game": buff_items[i]['game'],
+                 "market_hash_name": buff_items[i]['name'],
+                 "contextid": buff_items[i]['asset_info']['contextid'],
+                 "assetid": buff_items[i]['asset_info']['assetid'],
+                 "classid": buff_items[i]['asset_info']['classid'],
+                 "instanceid": buff_items[i]['asset_info']['instanceid'],
+                 "goods_id": buff_items[i]['goods_id'],
                  "price": item.price,
                  "income": (item.price - item.price * self.fee),
                  "has_market_min_price": False,
@@ -95,7 +96,9 @@ class BuffMarketplace(Marketplace):
             'https://buff.163.com/api/market/sell_order/create/manual_plus',
             cookies=self.create_cookies(),
             json={"game": "csgo", "assets": assets},
-        )
+        ).json()
 
-        # TODO: Write try/catch
-        print(response.json())
+        if not (response.get('error') is None):
+            raise Exception("Could not sell items from Buff with error:", response["code"], response["error"])
+
+        print(response)
