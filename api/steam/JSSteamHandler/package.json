@@ -1,0 +1,10 @@
+{
+    "type": "module",
+    "dependencies": {
+        "dotenv": "^16.0.3",
+        "globaloffensive": "^2.3.0",
+        "jwt-decode": "^3.1.2",
+        "steam-session": "^0.0.3-alpha",
+        "steam-user": "^4.27.0"
+    }
+}
