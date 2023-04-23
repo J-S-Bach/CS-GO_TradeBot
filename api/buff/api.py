@@ -45,3 +45,6 @@ class BuffMarketplace(Marketplace):
 
     def sell_item(self, item):
         pass
+
+    def get_balance(self) -> float:
+        None

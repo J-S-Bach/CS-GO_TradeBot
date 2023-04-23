@@ -73,3 +73,7 @@ class Marketplace(ABC):
     @abstractmethod
     def sell_item(self, item: Item):
         pass
+
+    @abstractmethod
+    def get_balance(self) -> float:
+        pass

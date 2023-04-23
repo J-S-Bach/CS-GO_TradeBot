@@ -72,5 +72,12 @@ class DMarketMarketplace(Marketplace):
 
         return items
 
+
     def sell_item(self, item):
         pass
+
+    def get_balance(self):
+        route = "/account/v1/balance"
+        balance = requests.get("https://api.dmarket.com" + route, headers=create_dmarket_header("GET", route)).json()
+        balanceUSD = round(int(balance['usd']) / 100, 2)
+        return balanceUSD
