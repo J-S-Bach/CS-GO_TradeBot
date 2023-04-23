@@ -70,7 +70,7 @@ class BuffMarketplace(Marketplace):
 
         return response["data"]["items"]
 
-    def sell_items(self, item: Item, amount: int = 1):
+    def sell_item(self, item: Item, amount: int = 1):
         # TODO: Error Handling
         buff_items = self.get_items_from_buff(item)
 
@@ -102,3 +102,6 @@ class BuffMarketplace(Marketplace):
             raise Exception("Could not sell items from Buff with error:", response["code"], response["error"])
 
         print(response)
+
+    def buy_item(self, item: Item, amount=1):
+        pass

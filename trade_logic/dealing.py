@@ -67,7 +67,7 @@ def buy_items(offer_list: list[ProfitableOffer]):
             pass
 
         if offer.buy_item.on_market == MARKETPLACE.BUFF:
-            buff.sell_items(offer.buy_item)
+            buff.buy_item(offer.buy_item)
 
         if offer.buy_item.on_market == MARKETPLACE.CSDEALS:
             # wont happen until general comparison between markets is implemented

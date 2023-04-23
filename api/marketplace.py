@@ -62,6 +62,15 @@ class ItemNotAvailable(Exception):
     pass
 
 
+class ItemsNotBought(Exception):
+    """Raised when one or more items failed to get bought. Takes the amount of not bought items"""
+    amount: int
+
+    def __init__(self, amount):
+        self.amount = amount
+        super().__init__(f"{amount} items have not been bought.")
+
+
 class Marketplace(ABC):
     @abstractmethod
     def get_best_offer_for_item(self, name: str) -> Item:
@@ -76,5 +85,9 @@ class Marketplace(ABC):
         pass
 
     @abstractmethod
-    def sell_items(self, item: Item):
+    def sell_item(self, items: Item, amount=1):
+        pass
+
+    @abstractmethod
+    def buy_item(self, item: Item, amount=1):
         pass
