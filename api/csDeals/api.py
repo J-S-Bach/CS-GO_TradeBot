@@ -1,7 +1,7 @@
 from typing import List
 
 import requests
-from api.marketplace import Marketplace, Item, tradeableItems, MARKETPLACE
+from api.marketplace import Marketplace, Item, tradeable_items, MARKETPLACE
 from datetime import timedelta, datetime
 
 
@@ -37,7 +37,7 @@ class CSDealsMarketplace(Marketplace):
         cs_deal_items = []
 
         for offeredItem in self.__get_all_offers()["response"]["items"]:
-            for tradable_item in tradeableItems:
+            for tradable_item in tradeable_items:
                 if tradable_item.name == offeredItem["marketname"]:
                     cs_deal_items.append(
                         Item(offeredItem["marketname"], None, float(offeredItem["lowest_price"]),
@@ -55,8 +55,17 @@ class CSDealsMarketplace(Marketplace):
 
         return return_offers
 
-    def sell_item(self, items: Item, amount=1):
-        pass
+    def sell_item(self, item: Item, amount=1):
+        raise NotImplemented()
 
     def buy_item(self, items: Item, amount=1):
-        pass
+        raise NotImplemented()
+
+    def create_buy_offer(self, item: Item):
+        raise NotImplemented()
+
+    def delete_buy_offer(self, buy_offer_id: str):
+        raise NotImplemented()
+
+    def get_buy_offers(self):
+        raise NotImplemented()

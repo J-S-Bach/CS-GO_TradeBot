@@ -1,13 +1,14 @@
+from api.CurrencyExchange.currencyExchange import get_exchange_rate, CURRENCY
 from api.buff.api import BuffMarketplace
-from api.marketplace import tradeableItems, Item
-from api.dMarket import api as dmarket
-from trade_logic.dealing import get_profitable_offers
+from api.dMarket.api import DMarketMarketplace as dmarket
+from api.csDeals.api import CSDealsMarketplace
+from api.marketplace import Item
+from trade_logic.buy_offer_management import check_buy_offer_dmarket, compare_buy_offers
 
 
 def main():
-    asd = dmarket.DMarketMarketplace()
+    compare_buy_offers()
 
-    print(asd.buy_item(Item("Clutch Case", "", 3, "")))
 
 
 if __name__ == '__main__':

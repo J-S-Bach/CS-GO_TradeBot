@@ -4,7 +4,7 @@ from typing import List
 import requests as requests
 
 from api.CurrencyExchange.currencyExchange import get_exchange_rate, CURRENCY
-from api.marketplace import Marketplace, Item, tradeableItems, MARKETPLACE, ItemNotAvailable
+from api.marketplace import Marketplace, Item, tradeable_items, MARKETPLACE, ItemNotAvailable
 
 
 class BuffMarketplace(Marketplace):
@@ -12,12 +12,12 @@ class BuffMarketplace(Marketplace):
     fee = 1 - 0.975
 
     def get_best_offer_for_item(self, name) -> Item:
-        for item in tradeableItems:
+        for item in tradeable_items:
             if item.name == name:
                 answer = requests.get(
-                    f"https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id={item.id}&page_num=1&sort_by=default&mode=&allow_tradable_cooldown=1&_={int(time.time())}").json()
+                    f"https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id={item.buffId}&page_num=1&sort_by=default&mode=&allow_tradable_cooldown=1&_={int(time.time())}").json()
                 buy_price = answer['data']['items'][0]['price']
-                return Item(item.name, None, buy_price * get_exchange_rate(CURRENCY.CNY, CURRENCY.USD),
+                return Item(item.name, None, float(buy_price) * get_exchange_rate(CURRENCY.CNY, CURRENCY.USD),
                             on_market=self.marketplace_name)
         else:
             raise Exception("No valid ItemName given")
@@ -25,7 +25,7 @@ class BuffMarketplace(Marketplace):
     def get_best_offers(self) -> List[Item]:
         buff_items = []
 
-        for item in tradeableItems:
+        for item in tradeable_items:
             answer = requests.get(
                 f"https://buff.163.com/api/market/goods/sell_order?game=csgo&goods_id={item.buffId}&page_num=1&sort_by=default&mode=&allow_tradable_cooldown=1&_={int(time.time())}")
 
@@ -101,7 +101,15 @@ class BuffMarketplace(Marketplace):
         if not (response.get('error') is None):
             raise Exception("Could not sell items from Buff with error:", response["code"], response["error"])
 
-        print(response)
-
     def buy_item(self, item: Item, amount=1):
-        pass
+        raise NotImplemented()
+
+    def create_buy_offer(self, item: Item):
+        raise NotImplemented()
+
+    def delete_buy_offer(self, buy_offer_id: str):
+        raise NotImplemented()
+
+    def get_buy_offers(self):
+        raise NotImplemented()
+
