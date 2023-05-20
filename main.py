@@ -1,3 +1,5 @@
+import time
+
 from api.CurrencyExchange.currencyExchange import get_exchange_rate, CURRENCY
 from api.buff.api import BuffMarketplace
 from api.dMarket.api import DMarketMarketplace as dmarket
@@ -7,8 +9,8 @@ from trade_logic.buy_offer_management import check_buy_offer_dmarket, compare_bu
 
 
 def main():
-    compare_buy_offers()
-
+    print("no main task ready")
+    pass
 
 
 if __name__ == '__main__':
