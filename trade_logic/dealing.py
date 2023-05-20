@@ -1,13 +1,13 @@
-from api.buff import api as buffApi
-from api.csDeals import api as csDealsApi
-from api.dMarket import api as dMarketApi
+from api.buff import api as buff_api
+from api.csDeals import api as csDeals_api
+from api.dMarket import api as dMarket_api
 from api.marketplace import Item, MARKETPLACE
 from api.steam.api import SteamApi
 
 steam = SteamApi()
-buff = buffApi.BuffMarketplace()
-cs_deals = csDealsApi.CSDealsMarketplace()
-d_market = dMarketApi.DMarketMarketplace()
+buff = buff_api.BuffMarketplace()
+cs_deals = csDeals_api.CSDealsMarketplace()
+d_market = dMarket_api.DMarketMarketplace()
 
 
 class ProfitableOffer:
@@ -37,17 +37,19 @@ def get_profitable_offers() -> list[ProfitableOffer]:
     for buffOffer in buff_offers:
 
         for csDealsOffer in cs_deals_offers:
+            # TODO: Replace with defindex once implemented (id vs name)
             if buffOffer.name == csDealsOffer.name:
-                if csDealsOffer.price < buffOffer.price * buffApi.BuffMarketplace.fee:
-                    # TODO: I doubt the next line is correct. because: percentage? and fee missing
-                    profit = round(buffOffer.price / csDealsOffer.price * 100 - 100, 4)
+                if csDealsOffer.price < buffOffer.price + buffOffer.price * buff_api.BuffMarketplace.fee:
+                    profit = round(
+                        csDealsOffer.price / (buffOffer.price - buffOffer.price * buff_api.BuffMarketplace.fee) * 100, 4)
                     offer_list.append(ProfitableOffer(buffOffer, csDealsOffer, profit))
 
         for dMarketOffer in dmarket_offers:
+            # TODO: Replace with defindex once implemented (id vs name)
             if buffOffer.name == dMarketOffer.name:
-                if dMarketOffer.price < buffOffer.price * buffApi.BuffMarketplace.fee:
-                    # TODO: I doubt the next line is correct. because: percentage? and fee missing
-                    profit = round(buffOffer.price / dMarketOffer.price * 100 - 100, 4)
+                if dMarketOffer.price < buffOffer.price + buffOffer.price * buff_api.BuffMarketplace.fee:
+                    profit = round(
+                        dMarketOffer.price / (buffOffer.price - buffOffer.price * buff_api.BuffMarketplace.fee) * 100, 4)
                     offer_list.append(ProfitableOffer(buffOffer, dMarketOffer, profit))
 
     # sort offers by percentual profit
@@ -61,10 +63,21 @@ def get_profitable_offers() -> list[ProfitableOffer]:
 def buy_items(offer_list: list[ProfitableOffer]):
     for offer in offer_list:
         if offer.buy_item.on_market == MARKETPLACE.DMARKET:
+            # wont happen until general comparison between markets is implemented
             pass
 
         if offer.buy_item.on_market == MARKETPLACE.BUFF:
-            pass
+            buff.buy_item(offer.buy_item)
 
         if offer.buy_item.on_market == MARKETPLACE.CSDEALS:
+            # wont happen until general comparison between markets is implemented
             pass
+
+        else:
+            raise Exception("Market for item " + offer.buy_item.name + " is not defined.")
+
+
+def deal_items():
+    offer_list = get_profitable_offers()
+
+    buy_items(offer_list)

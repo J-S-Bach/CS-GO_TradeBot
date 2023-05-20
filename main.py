@@ -1,9 +1,16 @@
-from trade_logic.dealing import get_profitable_offers
+import time
+
+from api.CurrencyExchange.currencyExchange import get_exchange_rate, CURRENCY
+from api.buff.api import BuffMarketplace
+from api.dMarket.api import DMarketMarketplace as dmarket
+from api.csDeals.api import CSDealsMarketplace
+from api.marketplace import Item
+from trade_logic.buy_offer_management import check_buy_offer_dmarket, compare_buy_offers
 
 
 def main():
-    for offer in get_profitable_offers():
-        print(offer.profit)
+    print("no main task ready")
+    pass
 
 
 if __name__ == '__main__':
