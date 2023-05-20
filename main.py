@@ -1,16 +1,19 @@
-import time
+import os
 
-from api.CurrencyExchange.currencyExchange import get_exchange_rate, CURRENCY
-from api.buff.api import BuffMarketplace
-from api.dMarket.api import DMarketMarketplace as dmarket
-from api.csDeals.api import CSDealsMarketplace
-from api.marketplace import Item
-from trade_logic.buy_offer_management import check_buy_offer_dmarket, compare_buy_offers
+from api.buff import api as buffApi
+from api.csDeals import api as csDealsApi
+from api.dMarket import api as dMarketApi
+from api.steam import api
+from operator import itemgetter
+
+from api.steam.api import SteamApi
+from database import createDatabase
+from database.createDatabase import csgo_cur
 
 
 def main():
-    print("no main task ready")
-    pass
+    if not os.path.isfile("CSGO.db") or bool(os.getenv('DATABASE_RESET')):
+        createDatabase.createDatabase()
 
 
 if __name__ == '__main__':

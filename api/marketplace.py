@@ -128,3 +128,4 @@ class Marketplace(ABC):
     @abstractmethod
     def get_balance(self) -> float:
         pass
+
