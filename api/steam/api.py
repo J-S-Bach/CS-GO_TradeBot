@@ -1,8 +1,11 @@
 from javascript import require
-
+import subprocess
 
 class SteamApi:
     def __init__(self):
+        # TODO: install packages with npm (silently?)
+        # subprocess.check_call('cd ./JSSteamHandler && npm i', shell=True)
+
         CsGoHandler = require("./JSSteamHandler/SteamHandler.js")
         self.csgo_handler = CsGoHandler()
 
@@ -18,11 +21,6 @@ class SteamApi:
 
     def move_to_casket(self, item_asset_id, casket_asset_id):
         self.csgo_handler.moveToCasket(item_asset_id, casket_asset_id)
-
-    # # Do we need it like this? If yes, we should instead save it to the Database,
-    # # but i believe we need all tradeable items in inventory which we can filter.
-    # def check_if_item_tradeable(self, asset_id):
-    #     return self.csgo_handler.checkIfItemTradeable(asset_id)
 
     def get_all_owned_items_in_inventory(self):
         return list(self.csgo_handler.getAllOwnedItemsInInventory())

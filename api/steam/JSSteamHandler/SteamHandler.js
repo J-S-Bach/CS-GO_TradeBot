@@ -8,7 +8,7 @@ export default class CsGoHandler {
             const user = await getLoggedInSteamUser();
             const csgo = new GlobalOffensive(user);
             user.gamesPlayed([730]);
-
+            
             return new Promise(resolve => {
                 csgo.on("connectedToGC", () => {
                     resolve(csgo);
