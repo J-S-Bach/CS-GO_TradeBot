@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
+from enum import Enum
 from typing import List
 
 
-class TradeableItems:
+class TradableItem:
     name: str
     buffId: str
 
@@ -12,26 +13,32 @@ class TradeableItems:
 
 
 tradeableItems = [
-    TradeableItems("Glove Case", "35086"),
-    TradeableItems("Operation Breakout Weapon Case", "35883"),
-    TradeableItems("Gamma 2 Case", "34987"),
-    TradeableItems("Chroma 3 Case", "33820"),
-    TradeableItems("Spectrum 2 Case", "38148"),
-    #TradeableItems("Operation Phoenix Weapon Case", "35890"),
-    #TradeableItems("Operation Broken Fang Case", "835343"),
-    #TradeableItems("Chroma 2 Case", "34369"),
-    #TradeableItems("Spectrum Case", "38150"),
-    #TradeableItems("Gamma Case", "34989"),
-    #TradeableItems("eSports 2013 Winter Case", "42346"),
-    #TradeableItems("eSports 2014 Summer Case", "42347"),
-    #TradeableItems("Shattered Web Case", "774681"),
-    TradeableItems("CS:GO Weapon Case", "34273"),
-    #TradeableItems("CS:GO Weapon Case 2", "34274"),
-    #TradeableItems("CS:GO Weapon Case 3", "34275"),
-    #TradeableItems("Prisma Case", "769121"),
-    #TradeableItems("Prisma Case 2", "779175"),
-    #TradeableItems("Danger Zone Case", "763236"),
+    TradableItem("Glove Case", "35086"),
+    TradableItem("Operation Breakout Weapon Case", "35883"),
+    TradableItem("Gamma 2 Case", "34987"),
+    TradableItem("Chroma 3 Case", "33820"),
+    TradableItem("Spectrum 2 Case", "38148"),
+    # TradeableItems("Operation Phoenix Weapon Case", "35890"),
+    # TradeableItems("Operation Broken Fang Case", "835343"),
+    # TradeableItems("Chroma 2 Case", "34369"),
+    # TradeableItems("Spectrum Case", "38150"),
+    # TradeableItems("Gamma Case", "34989"),
+    # TradeableItems("eSports 2013 Winter Case", "42346"),
+    # TradeableItems("eSports 2014 Summer Case", "42347"),
+    # TradeableItems("Shattered Web Case", "774681"),
+    TradableItem("CS:GO Weapon Case", "34273"),
+    # TradeableItems("CS:GO Weapon Case 2", "34274"),
+    # TradeableItems("CS:GO Weapon Case 3", "34275"),
+    # TradeableItems("Prisma Case", "769121"),
+    # TradeableItems("Prisma Case 2", "779175"),
+    # TradeableItems("Danger Zone Case", "763236"),
 ]
+
+
+class MARKETPLACE(Enum):
+    BUFF = "BUFF"
+    DMARKET = "DMARKET"
+    CSDEALS = "CSDEALS"
 
 
 class Item:
@@ -41,7 +48,7 @@ class Item:
     name: str
     assetId: str
     price: float
-    on_market: str
+    on_market: MARKETPLACE
 
     def __init__(self, name, item_id, price, on_market):
         self.name = name
@@ -52,23 +59,19 @@ class Item:
 
 class Marketplace(ABC):
     @abstractmethod
-    def getItemDetail(self, name: str) -> Item:
+    def get_best_offer_for_item(self, name: str) -> Item:
         pass
 
     @abstractmethod
-    def getItemDetailForItemList(self, name: List[str]):
+    def get_best_offer_for_item_list(self, names: List[str]) -> List[Item]:
         pass
 
     @abstractmethod
-    def getLowestPrice(self, name: str) -> Item:
+    def get_best_offers(self) -> List[Item]:
         pass
 
     @abstractmethod
-    def getLowestPriceForItemList(self, names: List[str]) -> List[Item]:
-        pass
-
-    @abstractmethod
-    def get_all_offers_lowest_price(self) -> List[Item]:
+    def sell_item(self, item: Item):
         pass
 
     @abstractmethod

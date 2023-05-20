@@ -7,7 +7,7 @@ import requests
 import urllib
 from nacl.bindings import crypto_sign
 
-from api.marketplace import Marketplace, Item, tradeableItems
+from api.marketplace import Marketplace, Item, tradeableItems, MARKETPLACE
 from typing import List
 
 public_key = "beba1de26545d9ebfc6c2fb7f5530b3426ea48a4fa55bdd25bb59cd400e29817"
@@ -31,9 +31,9 @@ def create_dmarket_header(method: str, api_url_path: str, body=""):
 
 
 class DMarketMarketplace(Marketplace):
-    marketplace_name = "DMARKET"
+    marketplace_name = MARKETPLACE.DMARKET
 
-    def getLowestPrice(self, name):
+    def get_best_offer_for_item(self, name):
         route = f"/price-aggregator/v1/aggregated-prices?Titles={urllib.parse.quote(name)}&Limit=100"
         a = requests.get("https://api.dmarket.com" + route, headers=create_dmarket_header("GET", route)).json()[
             "AggregatedTitles"][0]
@@ -45,10 +45,7 @@ class DMarketMarketplace(Marketplace):
 
         return Item(json_item["MarketHashName"], None, json_item["Offers"]["BestPrice"], self.marketplace_name)
 
-    def getItemDetail(self, name) -> Item:
-        pass
-
-    def getLowestPriceForItemList(self, names: List[str]) -> List[Item]:
+    def get_best_offer_for_item_list(self, names: List[str]) -> List[Item]:
         titles = ""
         for title in names:
             titles += "Titles=" + urllib.parse.quote(title) + "&"
@@ -61,10 +58,7 @@ class DMarketMarketplace(Marketplace):
 
         return items
 
-    def getItemDetailForItemList(self, name: List[str]):
-        pass
-
-    def get_all_offers_lowest_price(self) -> List[Item]:
+    def get_best_offers(self) -> List[Item]:
         titles = ""
         for tradeableItem in tradeableItems:
             titles += "Titles=" + urllib.parse.quote(tradeableItem.name) + "&"
@@ -73,9 +67,14 @@ class DMarketMarketplace(Marketplace):
         items = []
         for item in requests.get("https://api.dmarket.com" + route, headers=create_dmarket_header("GET", route)).json()[
             "AggregatedTitles"]:
+            print(item)
             items.append(Item(item["MarketHashName"], None, float(item["Offers"]["BestPrice"]), self.marketplace_name))
 
         return items
+
+
+    def sell_item(self, item):
+        pass
 
     def get_balance(self):
         route = "/account/v1/balance"
