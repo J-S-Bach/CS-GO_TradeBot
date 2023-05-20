@@ -12,11 +12,13 @@ from nacl.bindings import crypto_sign
 from api.marketplace import Marketplace, Item, tradeable_items, MARKETPLACE, ItemNotAvailable, ItemsNotBought, BuyOffer
 from typing import List
 
+from helper.request_with_retry import request_with_retry
+
 public_key = "beba1de26545d9ebfc6c2fb7f5530b3426ea48a4fa55bdd25bb59cd400e29817"
 load_dotenv()
 
 
-class BuffOffer():
+class BuffOffer:
     price: int
     offer_id: str
 
@@ -169,6 +171,27 @@ class DMarketMarketplace(Marketplace):
             raise Exception(response.json()["code"] + response.json()["message"])
 
         return response.json()
+
+    def get_closed_buy_offers(self):
+        route = "/marketplace-api/v1/user-targets/closed?Limit=10000&OrderDir=desc"
+        buy_offer_list: List[BuyOffer] = []
+
+        for str_buy_offer in request_with_retry(
+                lambda response: response.status_code != 200,
+                60 * 10,
+                lambda: requests.get(self._base_url + route, headers=create_dmarket_header("GET", route)),
+                2).json()["Trades"]:
+
+            buy_offer_list.append(
+                BuyOffer(
+                    str_buy_offer["Title"],
+                    str_buy_offer["AssetID"],
+                    str_buy_offer["Price"]["Amount"],
+                    self.marketplace_name,
+                    str_buy_offer["OfferID"]
+                ))
+
+        return buy_offer_list
 
     def delete_buy_offer(self, buy_offer_id: str):
         route = "/marketplace-api/v1/user-targets/delete"
