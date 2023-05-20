@@ -84,3 +84,7 @@ class CSDealsMarketplace(Marketplace):
             time.sleep(30)
             self.getBalance()
         return balance
+
+    def buy_items(self, item: Item, amount: int = 1):
+
+        pass
