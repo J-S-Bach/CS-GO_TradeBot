@@ -124,3 +124,7 @@ class Marketplace(ABC):
     @abstractmethod
     def get_buy_offers(self) -> Item:
         pass
+
+    @abstractmethod
+    def get_balance(self) -> float:
+        pass
