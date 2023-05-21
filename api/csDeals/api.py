@@ -70,3 +70,6 @@ class CSDealsMarketplace(Marketplace):
     def get_buy_offers(self):
         raise NotImplemented()
 
+    def get_closed_buy_offers(self):
+        raise NotImplemented()
+

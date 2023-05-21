@@ -54,13 +54,13 @@ class Item:
     Price in USD
     """
     name: str
-    assetId: str
+    asset_id: str
     price: float
     on_market: MARKETPLACE
 
     def __init__(self, name, item_id, price, on_market):
         self.name = name
-        self.assetId = item_id
+        self.asset_id = item_id
         self.price = price
         self.on_market = on_market
 
@@ -126,6 +126,6 @@ class Marketplace(ABC):
         pass
 
     @abstractmethod
-    def get_balance(self) -> float:
+    def get_closed_buy_offers(self) -> List[BuyOffer]:
         pass
 
