@@ -3,37 +3,32 @@ import fs from "fs";
 import SteamUser from "steam-user";
 import jwt_decode from "jwt-decode";
 import dotenv from "dotenv";
+import { getAuthCode } from "steam-totp";
 dotenv.config({ path: "../../../.env" });
 
 // This code was shamelessly stolen from DoctorMcKays repository under https://github.com/DoctorMcKay/node-steam-session/blob/master/examples/approve-qr.ts . - search here if you want some more information about it!
-async function getLoginSessionWithQRCodeApproval() {
+async function getLoginSession() {
     try {
-        let approver = new LoginApprover(process.env.STEAM_ACCESSTOKEN, process.env.STEAM_SHAREDSECRET);
+        // Create our LoginSession and start a login session using our credentials. This session will be for a client login.
         let session = new LoginSession(EAuthTokenPlatformType.SteamClient);
-
-        session.loginTimeout = 120000;
-
-        let startResult = await session.startWithQR();
-
-        session.on("remoteInteraction", () => {
-            console.error("A remote interaction was detected.");
+        let startResult = await session.startWithCredentials({
+            accountName: process.env.STEAM_USERNAME,
+            password: process.env.STEAM_PASSWORD,
+            steamGuardMachineToken: "",
         });
 
+        if (startResult.actionRequired) {
+            await session.submitSteamGuardCode(getAuthCode(process.env.STEAM_SHAREDSECRET));
+        }
+
         session.on("timeout", () => {
-            console.error("This login attempt has timed out.");
+            console.log("This login attempt has timed out.");
         });
 
         session.on("error", err => {
-            console.error(`ERROR: This login attempt has failed! ${err.message}`);
+            console.log(`ERROR: This login attempt has failed! ${err.message}`);
         });
 
-        await approver.approveAuthSession({
-            qrChallengeUrl: startResult.qrChallengeUrl,
-            approve: true,
-        });
-
-        // Now that we've approved the login attempt, we can immediately poll to get our access tokens
-        session.forcePoll();
 
         return new Promise(resolve => {
             session.on("authenticated", () => {
@@ -41,8 +36,8 @@ async function getLoginSessionWithQRCodeApproval() {
             });
         });
     } catch (e) {
-        console.error("Creating login session failed with error: ", e.message) 
-        throw e
+        console.error("Creating login session failed with error: ", e.message);
+        throw e;
     }
 }
 
@@ -93,10 +88,9 @@ const getLoggedInSteamUser = () =>
             }, 30000);
         };
 
-
         if (!checkIfValidToken(refreshToken)) {
             console.error("Detected invalid Refresh Token. Trying to regenerate one.");
-            getLoginSessionWithQRCodeApproval().then(session => {
+            getLoginSession().then(session => {
                 setRefreshTokenToFS({ refreshToken: session.refreshToken });
                 logOnUserAndReturn(session.refreshToken);
             });
@@ -105,4 +99,4 @@ const getLoggedInSteamUser = () =>
         }
     });
 
-export { getLoginSessionWithQRCodeApproval, getLoggedInSteamUser };
+export { getLoginSession, getLoggedInSteamUser };

@@ -1,12 +1,13 @@
+import os
+
 from javascript import require
-import subprocess
 
-class SteamApi:
+
+class CsGoCasketApi:
     def __init__(self):
-        # TODO: install packages with npm (silently?)
-        # subprocess.check_call('cd ./JSSteamHandler && npm i', shell=True)
+        os.system('cmd /c "cd ./api/steam/JSSteamHandler && npm i"')
 
-        CsGoHandler = require("./JSSteamHandler/SteamHandler.js")
+        CsGoHandler = require("./JSSteamHandler/CsGoHandler.js")
         self.csgo_handler = CsGoHandler()
 
     def get_all_owned_items_in_caskets(self):

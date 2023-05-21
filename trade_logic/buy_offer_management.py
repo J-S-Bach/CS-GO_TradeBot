@@ -1,7 +1,7 @@
 from api.buff.api import BuffMarketplace
 from api.dMarket.api import DMarketMarketplace
 from api.marketplace import ItemNotAvailable, Item, tradeable_items, MARKETPLACE
-from api.steam.api import SteamApi
+from api.steam.CsGoCasketApi import CsGoCasketApi
 from datetime import datetime
 from dateutil import parser
 
@@ -34,7 +34,7 @@ def check_buy_offer_dmarket(item: Item, amount=100):
 # TODO: Rename
 def compare_buy_offers():
     buff = BuffMarketplace()
-    steam = SteamApi()
+    steam = CsGoCasketApi()
 
     all_items_in_caskets = steam.get_all_owned_items_in_caskets()
 

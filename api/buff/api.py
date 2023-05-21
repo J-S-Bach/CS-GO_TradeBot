@@ -101,7 +101,7 @@ class BuffMarketplace(Marketplace):
             raise Exception("Could not sell items from Buff with error:", response["code"], response["error"])
 
     def buy_item(self, item: Item, amount=1):
-        raise NotImplemented()
+        NotImplemented()
 
     def create_buy_offer(self, item: Item):
         raise NotImplemented()
@@ -114,5 +114,3 @@ class BuffMarketplace(Marketplace):
 
     def get_closed_buy_offers(self):
         raise NotImplemented()
-
-
