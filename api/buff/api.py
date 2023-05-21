@@ -46,12 +46,11 @@ class BuffMarketplace(Marketplace):
     def create_cookies(self):
         # TODO: Replace with custom loading cookies since these need to be replaced regularly
         return {
-            "Device-Id": "ZXeO6pQgFmJ2w1aryQf7",
+            'Device-Id': 'l40vB6x92paqjkhfYVqc',
             'Locale-Supported': 'en',
+            'session': '1-1xRYWCTSO4oCdoh_2Iux2L9n7Ymajsniy8CTzgIhM31c2032647117',
             'game': 'csgo',
-            'session': '1-hUgTR7Fip4NKzLmvl-GbdCehT4T6_3SQBb5CJs1IPqzZ2032647117',
-            'client_id': 'xgl9XGnPqh1x7-gdtmaxGg',
-            'display_appids': '"[730\\054 570]"'
+            'csrf_token': 'ImZiZWUxY2I0ZDkyZTU5ZGYzMmY3N2U2ZTkwZjY0YjE1NWI4Y2U1Yzgi.F0to5A.ej3puC3GTHTOHNXGAIfus7L7wnU',
         }
 
     def get_items_from_buff(self, item: Item):
@@ -111,6 +110,44 @@ class BuffMarketplace(Marketplace):
 
     def get_buy_offers(self):
         raise NotImplemented()
+
+    def accept_sell_offer(self):
+        headers = {
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'Accept-Language': 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7,uk;q=0.6,af;q=0.5',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+            # 'Cookie': 'Device-Id=l40vB6x92paqjkhfYVqc; Locale-Supported=en; session=1-1xRYWCTSO4oCdoh_2Iux2L9n7Ymajsniy8CTzgIhM31c2032647117; game=csgo; csrf_token=ImZiZWUxY2I0ZDkyZTU5ZGYzMmY3N2U2ZTkwZjY0YjE1NWI4Y2U1Yzgi.F0tooA.69xp-N3PpOFuGTOMyRd_lOs7InY',
+            'Pragma': 'no-cache',
+            'Referer': 'https://buff.163.com/market/sell_order/to_deliver?game=csgo',
+            'Sec-Fetch-Dest': 'empty',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Site': 'same-origin',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
+            'X-Requested-With': 'XMLHttpRequest',
+            'sec-ch-ua': '"Google Chrome";v="113", "Chromium";v="113", "Not-A.Brand";v="24"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+        }
+        params = {
+            '_': str(int(time.time() * 1000)),
+        }
+        response = requests.get('https://buff.163.com/api/market/steam_trade', params=params, cookies=self.create_cookies(),
+                                headers=headers).json()
+        dataBody = []
+        for x in response['data']:
+            assetList = []
+            for y in x['items_to_trade']:
+                assetList.append(y['assetid'])
+            goodsID = x['items_to_trade'][0]['goods_id']
+            #ToDo Here TradeOffer akzeptieren
+            print("Offer here: https://steamcommunity.com/tradeoffer/" + str(x['tradeofferid']))
+            keys = ["tradeofferid", "Item", "amount", 'assets', "status"]
+            values = [x['tradeofferid'], x['goods_infos'][str(goodsID)]['market_hash_name'], len(x['items_to_trade']),
+                      assetList, "offer  accepted - check if trade succeed"]
+            dataBody.append(dict(zip(keys, values)))
+        
+        return dataBody
 
     def get_closed_buy_offers(self):
         raise NotImplemented()
