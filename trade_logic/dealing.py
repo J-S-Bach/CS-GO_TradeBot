@@ -2,9 +2,9 @@ from api.buff import api as buff_api
 from api.csDeals import api as csDeals_api
 from api.dMarket import api as dMarket_api
 from api.marketplace import Item, MARKETPLACE
-from api.steam.api import SteamApi
+from api.steam.CsGoCasketApi import CsGoCasketApi
 
-steam = SteamApi()
+steam = CsGoCasketApi()
 buff = buff_api.BuffMarketplace()
 cs_deals = csDeals_api.CSDealsMarketplace()
 d_market = dMarket_api.DMarketMarketplace()
